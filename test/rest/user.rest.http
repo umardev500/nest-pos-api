@@ -1,0 +1,5 @@
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInN1YiI6MSwibWVyY2hhbnRJZCI6MSwiaWF0IjoxNzQ1NjgyOTI3LCJleHAiOjE3NDU2ODY1Mjd9.2gfIYdqN9bZBIPvtfXHizzvU43deLVAM_B1aG7tGl2M
+
+### Find me
+GET {{API_URL}}/users/me
+    Authorization: {{token}}

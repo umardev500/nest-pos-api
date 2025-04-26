@@ -219,7 +219,7 @@ export class ProductUseCase {
     productId: number,
     updateData: Prisma.ProductUpdateInput,
   ): Promise<ProductWithVariants> {
-    const claims = this.cls.get<TokenClaims>('claims'); // get merchantId from claims
+    const claims = this.cls.get<TokenClaims>('claims');
 
     return this.productRepository.update(
       {

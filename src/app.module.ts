@@ -2,7 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ClsModule } from 'nestjs-cls';
 import { ClsInterceptor } from 'src/common/interceptors';
-import { AuthModule, ProductModule } from 'src/interface/http/modules';
+import {
+  AuthModule,
+  ProductModule,
+  UserModule,
+} from 'src/interface/http/modules';
 
 @Module({
   imports: [
@@ -12,6 +16,7 @@ import { AuthModule, ProductModule } from 'src/interface/http/modules';
     }),
     ProductModule,
     AuthModule,
+    UserModule,
     ClsModule.forRoot({
       global: true,
       middleware: { mount: true },
