@@ -20,7 +20,7 @@ export class ProductUseCase {
     }
 
     if (filters?.categoryId) {
-      where.categoryId = Number(filters.categoryId);
+      where.categoryId = filters.categoryId;
     }
 
     // Pass the `where` object to the repository method to fetch the products
