@@ -88,9 +88,17 @@ export class ProductRepositoryImpl implements ProductRepository {
   async findById(
     where: Prisma.ProductWhereUniqueInput,
   ): Promise<ProductWithVariants | null> {
-    const product = await this.fetchProduct(where);
-    console.log(product);
+    return await this.fetchProduct(where);
+  }
 
-    return product;
+  /**
+   * Deletes a product based on its unique identifier (id + merchantId).
+   *
+   * @param where - The unique filter for identifying the product (e.g., { id, merchantId }).
+   */
+  async deleteById(where: Prisma.ProductWhereUniqueInput): Promise<void> {
+    await this.prisma.product.delete({
+      where,
+    });
   }
 }

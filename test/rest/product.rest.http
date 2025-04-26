@@ -21,3 +21,8 @@ GET {{API_URL}}/products?search={{search}}&categoryId={{categoryId}}
 ### Find by id
 GET {{API_URL}}/products/1
     Authorization: {{token}}
+
+### Delete by id
+DELETE {{API_URL}}/products/1
+    Authorization: {{token}}
+

@@ -6,4 +6,5 @@ export interface ProductRepository {
   findById(
     where: Prisma.ProductWhereUniqueInput,
   ): Promise<ProductWithVariants | null>;
+  deleteById(where: Prisma.ProductWhereUniqueInput): Promise<void>;
 }

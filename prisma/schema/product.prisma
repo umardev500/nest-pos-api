@@ -8,11 +8,11 @@ model Product {
     price       Decimal @default(0) // uses if has no variants
     barcode     String?
     discount    Decimal @default(0)
-    categoryId  Int
+    categoryId  Int?
     merchantId  Int
 
-    merchant Merchant @relation(fields: [merchantId], references: [id])
-    category Category @relation(fields: [categoryId], references: [id])
+    merchant Merchant  @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+    category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
     ProductVariant ProductVariant[]
 
@@ -28,7 +28,7 @@ model ProductVariant {
     price     Decimal
     quantity  Int
 
-    Product              Product                @relation(fields: [productId], references: [id])
+    Product              Product                @relation(fields: [productId], references: [id], onDelete: Cascade)
     ProductVariantOption ProductVariantOption[]
 
     @@map("product_variants")
@@ -39,8 +39,8 @@ model ProductVariantOption {
     productVariantId Int
     variantOptionId  Int
 
-    variantOption  VariantOption  @relation(fields: [variantOptionId], references: [id])
-    ProductVariant ProductVariant @relation(fields: [productVariantId], references: [id])
+    variantOption  VariantOption  @relation(fields: [variantOptionId], references: [id], onDelete: Cascade)
+    ProductVariant ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade)
 
     @@map("product_variant_options")
 }

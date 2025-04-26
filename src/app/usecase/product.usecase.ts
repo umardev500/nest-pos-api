@@ -1,6 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { Prisma } from 'prisma/generated';
+import { PrismaClientKnownRequestError } from 'prisma/generated/runtime/library';
 import { ProductFilterDto, VariantFormatted } from 'src/app/dto';
 import { ProductWithVariants, TokenClaims } from 'src/domain/entities';
 import { ProductRepositoryImpl } from 'src/infra/repositories';
@@ -130,9 +135,73 @@ export class ProductUseCase {
     });
 
     if (!product) {
-      return null;
+      throw new NotFoundException('Product not found.');
     }
 
     return this.formatProduct(product);
+  }
+
+  /**
+   * Deletes a product by its ID and merchant ID.
+   *
+   * This method first checks if the product exists in the database for the given product ID and merchant ID.
+   * If the product exists, it proceeds with deleting it. If any errors occur during the deletion process,
+   * such as the product not being found or a foreign key constraint violation, they are handled appropriately.
+   *
+   * @param productId - The unique identifier of the product to be deleted.
+   * @throws NotFoundException if the product does not exist.
+   * @throws InternalServerErrorException if there is a foreign key constraint violation or any other unexpected error.
+   */
+  async deleteProductById(productId: number): Promise<void> {
+    // Retrieve the claims (e.g., merchantId) from the session or token
+    const claims = this.cls.get<TokenClaims>('claims');
+
+    try {
+      // Check if the product exists first by looking up using the productId and merchantId
+      const product = await this.productRepository.findById({
+        id: productId,
+        merchantId: claims.merchantId, // Ensure that the product belongs to the current merchant
+      });
+
+      console.log(product);
+
+      // If the product is not found, throw a NotFoundException with a relevant message
+      if (!product) {
+        throw new NotFoundException('Product not found.');
+      }
+
+      // If the product exists, proceed with deletion
+      await this.productRepository.deleteById({
+        id: productId,
+        merchantId: claims.merchantId, // Use the merchantId from claims to ensure proper authorization
+      });
+    } catch (error) {
+      // Handle the specific Prisma error for a non-existent record (P2025)
+      if (
+        (error instanceof PrismaClientKnownRequestError &&
+          error.code === 'P2025') ||
+        error instanceof NotFoundException
+      ) {
+        // If the product was not found in the database, throw a NotFoundException
+        throw new NotFoundException('Product not found. Unable to delete.');
+      }
+
+      // Handle foreign key violation error (P2003)
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === 'P2003'
+      ) {
+        // If there's a foreign key constraint violation (e.g., related records preventing deletion),
+        // throw an InternalServerErrorException
+        throw new InternalServerErrorException(
+          'Cannot delete the product due to a foreign key constraint violation. Please check related records.',
+        );
+      }
+
+      // Catch all other unexpected errors and throw a generic InternalServerErrorException
+      throw new InternalServerErrorException(
+        'An unexpected error occurred during product deletion.',
+      );
+    }
   }
 }

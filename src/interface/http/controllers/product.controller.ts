@@ -1,7 +1,7 @@
 import {
   Controller,
+  Delete,
   Get,
-  NotFoundException,
   Param,
   Query,
   UseGuards,
@@ -37,12 +37,20 @@ export class ProductController {
   ) {
     const product =
       await this.productUseCase.getProductByIdAndMerchantId(productId);
-    if (!product) {
-      // If no product is found, throw a NotFoundException with a relevant message
-      throw new NotFoundException({
-        message: `Product with id ${productId} not found`,
-      });
-    }
+
     return product; // Return the found product
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  /**
+   * Deletes a product by its ID and merchant ID.
+   * Ensures the product belongs to the merchant before deleting.
+   * @param productId - The unique identifier of the product to delete.
+   * @returns A success message upon deletion.
+   */
+  async deleteProductById(@Param('id') productId: number) {
+    await this.productUseCase.deleteProductById(productId);
+    return { message: 'Product deleted successfully' };
   }
 }
