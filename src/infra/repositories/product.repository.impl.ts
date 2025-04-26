@@ -77,25 +77,7 @@ export class ProductRepositoryImpl implements ProductRepository {
     });
   }
 
-  async find() {
-    // Hardcoded search term
-    const search = 'Cool';
-    const categoryId = 1;
-
-    const where: Prisma.ProductWhereInput = {
-      AND: [
-        {
-          OR: [
-            { name: { contains: search } }, // Search by name
-            { description: { contains: search } }, // Search by description
-          ],
-        },
-        {
-          categoryId: categoryId, // Filter by categoryId
-        },
-      ],
-    };
-
+  async find(where?: Prisma.ProductWhereInput) {
     // Fetch products based on the hardcoded search
     const products = await this.fetchProducts(where);
     const formattedProducts = this.formatProducts(products);
