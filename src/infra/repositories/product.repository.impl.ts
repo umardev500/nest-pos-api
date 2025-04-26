@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from 'prisma/generated';
 import { VariantFormatted } from 'src/app/dto';
 import { ProductRepository } from 'src/domain/repositories';
 import { PrismaService } from 'src/infra/prisma/prisma.service';
@@ -7,7 +8,7 @@ import { PrismaService } from 'src/infra/prisma/prisma.service';
 export class ProductRepositoryImpl implements ProductRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  private fetchProducts(where?: { categoryId?: number }) {
+  private fetchProducts(where?: Prisma.ProductWhereInput) {
     return this.prisma.product.findMany({
       where,
       include: {
@@ -77,8 +78,28 @@ export class ProductRepositoryImpl implements ProductRepository {
   }
 
   async find() {
-    // Fetch all products along with their variants and nested variant options/groups
-    const products = await this.fetchProducts();
-    return this.formatProducts(products);
+    // Hardcoded search term
+    const search = 'Cool';
+    const categoryId = 1;
+
+    const where: Prisma.ProductWhereInput = {
+      AND: [
+        {
+          OR: [
+            { name: { contains: search } }, // Search by name
+            { description: { contains: search } }, // Search by description
+          ],
+        },
+        {
+          categoryId: categoryId, // Filter by categoryId
+        },
+      ],
+    };
+
+    // Fetch products based on the hardcoded search
+    const products = await this.fetchProducts(where);
+    const formattedProducts = this.formatProducts(products);
+
+    return formattedProducts;
   }
 }
