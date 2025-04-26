@@ -20,55 +20,64 @@ export class ProductUseCase {
    * @returns A new list of products with structured data including variants, stock, price, and more.
    */
   private formatProducts(products: ProductWithVariants[]) {
-    return products.map((product) => {
-      // Check if the product has variants (size, color, etc.)
-      const hasVariants = product.ProductVariant.length > 0;
+    return products.map((product) => this.formatProduct(product)); // Use helper method for single product formatting
+  }
 
-      // Process the variants to extract necessary details like size, color, price, and stock
-      const variants: VariantFormatted[] = product.ProductVariant.map(
-        (variant) => {
-          // Extract size and color from variant options
-          const size = variant.ProductVariantOption.find(
-            (opt) => opt.variantOption.variantGroup.name === 'Size',
-          )?.variantOption.value;
+  /**
+   * Formats a single product, extracting and organizing relevant data like variants,
+   * total stock, price, and other product details into a structured format.
+   *
+   * @param product - A single product to be formatted, fetched from the database.
+   * @returns A formatted product with structured data including variants, stock, price, and more.
+   */
+  private formatProduct(product: ProductWithVariants) {
+    // Check if the product has variants (size, color, etc.)
+    const hasVariants = product.ProductVariant.length > 0;
 
-          const color = variant.ProductVariantOption.find(
-            (opt) => opt.variantOption.variantGroup.name === 'Color',
-          )?.variantOption.value;
+    // Process the variants to extract necessary details like size, color, price, and stock
+    const variants: VariantFormatted[] = product.ProductVariant.map(
+      (variant) => {
+        // Extract size and color from variant options
+        const size = variant.ProductVariantOption.find(
+          (opt) => opt.variantOption.variantGroup.name === 'Size',
+        )?.variantOption.value;
 
-          return {
-            size,
-            color,
-            price: variant.price.toString(),
-            stock: variant.quantity,
-          };
-        },
-      );
+        const color = variant.ProductVariantOption.find(
+          (opt) => opt.variantOption.variantGroup.name === 'Color',
+        )?.variantOption.value;
 
-      // Calculate the total stock based on variants, or use the product's main quantity if no variants
-      const totalQuantity = hasVariants
-        ? variants.reduce((sum, v) => sum + v.stock, 0)
-        : product.quantity;
+        return {
+          size,
+          color,
+          price: variant.price.toString(),
+          stock: variant.quantity,
+        };
+      },
+    );
 
-      // Select the price of the product, considering variants if available
-      const price = !hasVariants
-        ? product.price.toString()
-        : (variants[0]?.price ?? '0');
+    // Calculate the total stock based on variants, or use the product's main quantity if no variants
+    const totalQuantity = hasVariants
+      ? variants.reduce((sum, v) => sum + v.stock, 0)
+      : product.quantity;
 
-      // Return the fully formatted product with its details
-      return {
-        id: product.id,
-        name: product.name,
-        description: product.description,
-        photo: product.photo,
-        quantity: totalQuantity,
-        capital: product.capital,
-        price,
-        discount: product.discount,
-        barcode: product.barcode,
-        variants, // Include the variants in the formatted result
-      };
-    });
+    // Select the price of the product, considering variants if available
+    const price = !hasVariants
+      ? product.price.toString()
+      : (variants[0]?.price ?? '0');
+
+    // Return the fully formatted product with its details
+    return {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      photo: product.photo,
+      quantity: totalQuantity,
+      capital: product.capital,
+      price,
+      discount: product.discount,
+      barcode: product.barcode,
+      variants, // Include the variants in the formatted result
+    };
   }
 
   /**
@@ -113,9 +122,7 @@ export class ProductUseCase {
    * @param productId - The unique identifier of the product.
    * @returns The product with its variants and options or null if not found.
    */
-  async getProductByIdAndMerchantId(
-    productId: number,
-  ): Promise<ProductWithVariants | null> {
+  async getProductByIdAndMerchantId(productId: number) {
     const claims = this.cls.get<TokenClaims>('claims');
 
     // Fetch the product with the given ID and merchantId from claims
@@ -124,6 +131,10 @@ export class ProductUseCase {
       merchantId: claims.merchantId,
     });
 
-    return product;
+    if (!product) {
+      return null;
+    }
+
+    return this.formatProduct(product);
   }
 }

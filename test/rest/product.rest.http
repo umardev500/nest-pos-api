@@ -1,6 +1,6 @@
 @categoryId = 1
 @search = T-Shirt
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInN1YiI6MSwibWVyY2hhbnRJZCI6MSwiaWF0IjoxNzQ1NjYwNTQzLCJleHAiOjE3NDU2NjQxNDN9.srK44gr9EPPfW9i6M_g39s9i4Uff-V9iovbsZ3yC6es
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInN1YiI6MSwibWVyY2hhbnRJZCI6MSwiaWF0IjoxNzQ1NjY0MTk3LCJleHAiOjE3NDU2Njc3OTd9.c7581225cHk-6fNk_UUevROtgDSR3zel3GdRt1WrNRQ
 
 ### Find
 GET {{API_URL}}/products
