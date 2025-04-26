@@ -135,4 +135,36 @@ export class ProductRepositoryImpl implements ProductRepository {
       throw new Error('Error creating product: ' + error.message);
     }
   }
+
+  /**
+   * Updates an existing product in the database.
+   *
+   * @param where - The unique identifier for the product to update.
+   * @param data - The data to update the product with.
+   * @returns The updated product, including any related variants if updated.
+   */
+  async update(
+    where: Prisma.ProductWhereUniqueInput,
+    data: Prisma.ProductUpdateInput,
+  ): Promise<ProductWithVariants> {
+    return this.prisma.product.update({
+      where,
+      data,
+      include: {
+        ProductVariant: {
+          include: {
+            ProductVariantOption: {
+              include: {
+                variantOption: {
+                  include: {
+                    variantGroup: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  }
 }

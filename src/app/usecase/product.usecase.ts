@@ -214,4 +214,19 @@ export class ProductUseCase {
   ): Promise<ProductWithVariants> {
     return this.productRepository.create(data);
   }
+
+  async updateProduct(
+    productId: number,
+    updateData: Prisma.ProductUpdateInput,
+  ): Promise<ProductWithVariants> {
+    const claims = this.cls.get<TokenClaims>('claims'); // get merchantId from claims
+
+    return this.productRepository.update(
+      {
+        id: productId,
+        merchantId: claims.merchantId,
+      },
+      updateData,
+    );
+  }
 }

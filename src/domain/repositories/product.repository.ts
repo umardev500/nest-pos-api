@@ -15,4 +15,16 @@ export interface ProductRepository {
    * @returns The newly created product, including its variants.
    */
   create(data: Prisma.ProductCreateInput): Promise<ProductWithVariants>;
+
+  /**
+   * Updates an existing product in the database.
+   *
+   * @param where - The unique identifier for the product to update.
+   * @param data - The data to update the product with.
+   * @returns The updated product, including any related variants if updated.
+   */
+  update(
+    where: Prisma.ProductWhereUniqueInput,
+    data: Prisma.ProductUpdateInput,
+  ): Promise<ProductWithVariants>;
 }

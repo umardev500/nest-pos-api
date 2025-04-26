@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -69,5 +70,14 @@ export class ProductController {
     @Body() createProductDto: Prisma.ProductCreateInput,
   ): Promise<ProductWithVariants> {
     return this.productUseCase.createProduct(createProductDto); // Calls the use case to create the product
+  }
+
+  @Put(':id')
+  @UseGuards(JwtAuthGuard)
+  async updateProduct(
+    @Param('id') productId: number,
+    @Body() updateData: Prisma.ProductUpdateInput,
+  ) {
+    return this.productUseCase.updateProduct(productId, updateData);
   }
 }

@@ -96,3 +96,71 @@ Content-Type: application/json
     ]
   }
 }
+
+### Update by id add new variant
+PUT {{API_URL}}/products/1
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "name": "Updated Product",
+  "ProductVariant": {
+    "create": [
+      {
+        "price": 15.99,
+        "quantity": 50,
+        "ProductVariantOption": {
+          "create": [
+            {
+              "variantOption": {
+                "create": {
+                  "value": "M",
+                  "variantGroup": {
+                    "create": {
+                      "name": "Size"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "variantOption": {
+                "create": {
+                  "value": "Red",
+                  "variantGroup": {
+                    "create": {
+                      "name": "Color"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+
+
+### Update by id update variant
+PUT {{API_URL}}/products/1
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "name": "Updated Product",
+  "ProductVariant": {
+    "update": [
+      {
+        "where": {
+          "id": 9
+        },
+        "data": {
+          "price": 11.99,
+          "quantity": 80
+        }
+      }
+    ]
+  }
+}
