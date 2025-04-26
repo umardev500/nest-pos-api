@@ -12,13 +12,19 @@ export class ProductUseCase {
     private readonly cls: ClsService,
   ) {}
 
+  /**
+   * Fetches products based on optional filters.
+   * @param filters - Optional filters like search text and category.
+   * @returns List of products that match the filters.
+   */
   async getProducts(filters?: ProductFilterDto) {
+    // Get the token claims (e.g., merchantId) from the current session
     const claims = this.cls.get<TokenClaims>('claims');
 
-    // Initialize the `where` object for Prisma query
+    // Initialize the Prisma query filter object
     const where: Prisma.ProductWhereInput = {};
 
-    // Conditionally add filters to the `where` object
+    // Apply search filters (name or description contains the search term)
     if (filters?.search) {
       where.OR = [
         { name: { contains: filters.search } },
@@ -26,15 +32,17 @@ export class ProductUseCase {
       ];
     }
 
+    // Apply category filter if provided
     if (filters?.categoryId) {
       where.categoryId = filters.categoryId;
     }
 
+    // Apply merchantId from claims if available
     if (claims.merchantId) {
       where.merchantId = claims.merchantId;
     }
 
-    // Pass the `where` object to the repository method to fetch the products
+    // Fetch products from the repository using the `where` filter
     return this.productRepository.find(where);
   }
 }
