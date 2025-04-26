@@ -61,9 +61,7 @@ export class ProductUseCase {
       : product.quantity;
 
     // Select the price of the product, considering variants if available
-    const price = !hasVariants
-      ? product.price.toString()
-      : (variants[0]?.price ?? '0');
+    const price = !hasVariants ? product.price.toString() : 0;
 
     // Return the fully formatted product with its details
     return {
