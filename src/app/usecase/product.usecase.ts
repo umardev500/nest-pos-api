@@ -66,7 +66,7 @@ export class ProductUseCase {
       : product.quantity;
 
     // Select the price of the product, considering variants if available
-    const price = !hasVariants ? product.price.toString() : 0;
+    const price = !hasVariants ? Number(product.price.toString()) : 0;
 
     // Return the fully formatted product with its details
     return {
@@ -163,8 +163,6 @@ export class ProductUseCase {
         merchantId: claims.merchantId, // Ensure that the product belongs to the current merchant
       });
 
-      console.log(product);
-
       // If the product is not found, throw a NotFoundException with a relevant message
       if (!product) {
         throw new NotFoundException('Product not found.');
@@ -203,5 +201,17 @@ export class ProductUseCase {
         'An unexpected error occurred during product deletion.',
       );
     }
+  }
+
+  /**
+   * Creates a new product using the provided data.
+   *
+   * @param data - The data needed to create a product.
+   * @returns The newly created product with variants.
+   */
+  async createProduct(
+    data: Prisma.ProductCreateInput,
+  ): Promise<ProductWithVariants> {
+    return this.productRepository.create(data);
   }
 }

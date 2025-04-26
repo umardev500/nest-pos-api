@@ -101,4 +101,38 @@ export class ProductRepositoryImpl implements ProductRepository {
       where,
     });
   }
+
+  /**
+   * Creates a new product in the database, including any related variants if provided.
+   *
+   * @param data - The data needed to create a product.
+   * @returns The newly created product with its variants.
+   */
+  async create(data: Prisma.ProductCreateInput): Promise<ProductWithVariants> {
+    try {
+      const createdProduct = await this.prisma.product.create({
+        data,
+        include: {
+          ProductVariant: {
+            include: {
+              ProductVariantOption: {
+                include: {
+                  variantOption: {
+                    include: {
+                      variantGroup: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return createdProduct;
+    } catch (error) {
+      // You can add error handling here if needed
+      throw new Error('Error creating product: ' + error.message);
+    }
+  }
 }

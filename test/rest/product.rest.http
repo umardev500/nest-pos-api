@@ -1,6 +1,6 @@
 @categoryId = 1
 @search = T-Shirt
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInN1YiI6MSwibWVyY2hhbnRJZCI6MSwiaWF0IjoxNzQ1NjY0MTk3LCJleHAiOjE3NDU2Njc3OTd9.c7581225cHk-6fNk_UUevROtgDSR3zel3GdRt1WrNRQ
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInN1YiI6MSwibWVyY2hhbnRJZCI6MSwiaWF0IjoxNzQ1NjY4NDg5LCJleHAiOjE3NDU2NzIwODl9.7tKklIcorRHpIQ6mM52Xw58oHk2iuE3R6ZwpUJwC52Q
 
 ### Find
 GET {{API_URL}}/products
@@ -26,3 +26,73 @@ GET {{API_URL}}/products/1
 DELETE {{API_URL}}/products/1
     Authorization: {{token}}
 
+### Create a new item without variant
+POST {{API_URL}}/products
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "name": "Cocolate Premium",
+  "description": "A delicious cocolate",
+  "price": 19.99,
+  "quantity": 100,
+  "capital": 5.00,
+  "discount": 10.00,
+  "barcode": "1234567890123",
+  "categoryId": 1,
+  "merchantId": 1
+}
+
+
+### Create a new  item
+POST {{API_URL}}/products
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "name": "Pizza",
+  "description": "A delicious pizza with various toppings",
+  "price": 19.99,
+  "quantity": 100,
+  "capital": 5,
+  "discount": 10,
+  "barcode": "1234567890123",
+  "categoryId": 1,
+  "merchantId": 1,
+  "ProductVariant": {
+    "create": [
+      {
+        "price": 15.99,
+        "quantity": 50,
+        "ProductVariantOption": {
+          "create": [
+            {
+              "variantOption": {
+                "create": {
+                  "value": "M",
+                  "variantGroup": {
+                    "create": {
+                      "name": "Size"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "variantOption": {
+                "create": {
+                  "value": "Red",
+                  "variantGroup": {
+                    "create": {
+                      "name": "Color"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
