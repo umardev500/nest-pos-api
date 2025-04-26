@@ -23,6 +23,10 @@ export class ProductUseCase {
       where.categoryId = filters.categoryId;
     }
 
+    if (filters?.merchantId) {
+      where.merchantId = filters.merchantId;
+    }
+
     // Pass the `where` object to the repository method to fetch the products
     return this.productRepository.find(where);
   }

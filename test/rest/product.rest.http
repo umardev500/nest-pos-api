@@ -1,8 +1,10 @@
 @categoryId = 1
 @search = T-Shirt
+@merchantId = 1
 
 ### Find
 GET {{API_URL}}/products
+    Merchant-Id: {{merchantId}}
 
 ### Find by filter
 GET {{API_URL}}/products?categoryId={{categoryId}}
