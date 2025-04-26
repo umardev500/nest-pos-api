@@ -9,6 +9,7 @@ model Merchant {
     updatedAt DateTime @updatedAt
 
     Product Product[]
+    User    User[]
 
     @@map("merchants")
 }
