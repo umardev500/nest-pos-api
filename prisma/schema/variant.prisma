@@ -7,10 +7,11 @@ model VariantGroup {
 }
 
 model VariantOption {
-    id             Int          @id @default(autoincrement())
-    value          String // e.g. "Small", "Red"
-    variantGroupId Int
-    variantGroup   VariantGroup @relation(fields: [variantGroupId], references: [id])
+    id                   Int                    @id @default(autoincrement())
+    value                String // e.g. "Small", "Red"
+    variantGroupId       Int
+    variantGroup         VariantGroup           @relation(fields: [variantGroupId], references: [id])
+    ProductVariantOption ProductVariantOption[]
 
     @@map("variant_options")
 }
