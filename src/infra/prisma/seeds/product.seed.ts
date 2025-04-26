@@ -19,6 +19,7 @@ export default async function seedProducts() {
       discount: 0,
       barcode: '123456789',
       categoryId: 1,
+      merchantId: 1,
       ProductVariant: {
         create: [
           // Variant for Size S, Color Red

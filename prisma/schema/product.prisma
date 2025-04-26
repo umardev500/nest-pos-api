@@ -9,8 +9,11 @@ model Product {
     barcode     String?
     discount    Decimal @default(0)
     categoryId  Int
+    merchantId  Int
 
-    category       Category         @relation(fields: [categoryId], references: [id])
+    merchant Merchant @relation(fields: [merchantId], references: [id])
+    category Category @relation(fields: [categoryId], references: [id])
+
     ProductVariant ProductVariant[]
 
     created_at DateTime @default(now())
