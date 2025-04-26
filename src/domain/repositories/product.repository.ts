@@ -1,3 +1,3 @@
 export interface ProductRepository {
-  find(): string;
+  find(): Promise<any>;
 }
