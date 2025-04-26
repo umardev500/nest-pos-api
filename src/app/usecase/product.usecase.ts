@@ -14,7 +14,6 @@ export class ProductUseCase {
 
   async getProducts(filters?: ProductFilterDto) {
     const claims = this.cls.get<TokenClaims>('claims');
-    console.log(claims);
 
     // Initialize the `where` object for Prisma query
     const where: Prisma.ProductWhereInput = {};

@@ -16,6 +16,9 @@ export class ClsInterceptor implements NestInterceptor {
     if (request.user) {
       this.cls.set('claims', request.user);
     }
+
+    console.log('🌟 CLS Interceptor:', request.user);
+
     return next.handle();
   }
 }
