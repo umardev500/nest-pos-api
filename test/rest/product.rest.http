@@ -1,7 +1,14 @@
 @categoryId = 1
+@search = T-Shirt
 
 ### Find
 GET {{API_URL}}/products
 
 ### Find by filter
 GET {{API_URL}}/products?categoryId={{categoryId}}
+
+### Find by search
+GET {{API_URL}}/products?search={{search}}
+
+### Find by search and category
+GET {{API_URL}}/products?search={{search}}&categoryId={{categoryId}}
