@@ -30,7 +30,7 @@ export class ProductUseCase {
       where.categoryId = filters.categoryId;
     }
 
-    if (filters?.merchantId) {
+    if (claims.merchantId) {
       where.merchantId = claims.merchantId;
     }
 
