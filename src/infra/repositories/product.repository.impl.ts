@@ -53,12 +53,18 @@ export class ProductRepositoryImpl implements ProductRepository {
         ? variants.reduce((sum, v) => sum + v.stock, 0)
         : product.quantity;
 
+      const price = !hasVariants ? variants[0].price : product.price.toString();
+
       return {
         id: product.id,
         name: product.name,
         description: product.description,
         photo: product.photo,
         quantity: totalQuantity,
+        capital: product.capital,
+        price: price,
+        discount: product.discount,
+        barcode: product.barcode,
         variants,
       };
     });
