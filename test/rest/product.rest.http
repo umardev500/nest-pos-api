@@ -10,9 +10,12 @@ GET {{API_URL}}/products
 
 ### Find by filter
 GET {{API_URL}}/products?categoryId={{categoryId}}
+    Authorization: {{token}}
 
 ### Find by search
 GET {{API_URL}}/products?search={{search}}
+    Authorization: {{token}}
 
 ### Find by search and category
 GET {{API_URL}}/products?search={{search}}&categoryId={{categoryId}}
+    Authorization: {{token}}
