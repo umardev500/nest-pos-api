@@ -89,6 +89,8 @@ export class ProductRepositoryImpl implements ProductRepository {
     where: Prisma.ProductWhereUniqueInput,
   ): Promise<ProductWithVariants | null> {
     const product = await this.fetchProduct(where);
+    console.log(product);
+
     return product;
   }
 }

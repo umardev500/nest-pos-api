@@ -49,7 +49,7 @@ export class ProductUseCase {
         return {
           size,
           color,
-          price: variant.price.toString(),
+          price: parseFloat(variant.price.toString()),
           stock: variant.quantity,
         };
       },
@@ -70,9 +70,9 @@ export class ProductUseCase {
       description: product.description,
       photo: product.photo,
       quantity: totalQuantity,
-      capital: product.capital,
+      capital: parseFloat(product.capital.toString()),
       price,
-      discount: product.discount,
+      discount: parseFloat(product.discount.toString()),
       barcode: product.barcode,
       variants, // Include the variants in the formatted result
     };

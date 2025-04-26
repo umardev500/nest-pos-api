@@ -2,6 +2,6 @@
 export type VariantFormatted = {
   size?: string;
   color?: string;
-  price: string;
+  price: number;
   stock: number;
 };
