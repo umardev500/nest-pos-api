@@ -1,10 +1,12 @@
 @categoryId = 1
 @search = T-Shirt
 @merchantId = 1
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInN1YiI6MSwibWVyY2hhbnRfaWQiOjEsImlhdCI6MTc0NTY1ODE1OCwiZXhwIjoxNzQ1NjYxNzU4fQ.hoXBWtbXqb4A7UOceNH8svNQNqYXAn5fcsPNnOG-bhc
 
 ### Find
 GET {{API_URL}}/products
     Merchant-Id: {{merchantId}}
+    Authorization: {{token}}
 
 ### Find by filter
 GET {{API_URL}}/products?categoryId={{categoryId}}

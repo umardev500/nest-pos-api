@@ -6,6 +6,7 @@ import { AuthUseCase } from 'src/app/usecase';
 import { PrismaService } from 'src/infra/prisma/prisma.service';
 import { UserRepositoryImpl } from 'src/infra/repositories/user.repository.impl';
 import { AuthController } from 'src/interface/http/controllers';
+import { JwtStrategy } from 'src/interface/http/strategies';
 
 @Module({
   controllers: [AuthController],
@@ -22,6 +23,6 @@ import { AuthController } from 'src/interface/http/controllers';
       }),
     }),
   ],
-  providers: [AuthUseCase, UserRepositoryImpl, PrismaService],
+  providers: [AuthUseCase, UserRepositoryImpl, PrismaService, JwtStrategy],
 })
 export class AuthModule {}
