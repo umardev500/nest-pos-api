@@ -18,7 +18,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migrate": "yarn prisma migrate dev --name init --schema=prisma/schema/"
+    "migrate": "yarn prisma migrate dev --name init --schema=prisma/schema/",
+    "seeds": "bun src/infra/prisma/seeds/index.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
