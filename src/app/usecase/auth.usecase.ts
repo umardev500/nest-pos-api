@@ -29,7 +29,11 @@ export class AuthUseCase {
   }
 
   login(user: User) {
-    const payload: TokenClaims = { email: user.email, sub: user.id };
+    const payload: TokenClaims = {
+      email: user.email,
+      sub: user.id,
+      merchant_id: user.merchant_id,
+    };
 
     return {
       access_token: this.jwtService.sign(payload),
