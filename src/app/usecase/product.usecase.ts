@@ -107,4 +107,23 @@ export class ProductUseCase {
     // Format the fetched products
     return this.formatProducts(products);
   }
+
+  /**
+   * Fetches a product by its ID and merchant ID.
+   * @param productId - The unique identifier of the product.
+   * @returns The product with its variants and options or null if not found.
+   */
+  async getProductByIdAndMerchantId(
+    productId: number,
+  ): Promise<ProductWithVariants | null> {
+    const claims = this.cls.get<TokenClaims>('claims');
+
+    // Fetch the product with the given ID and merchantId from claims
+    const product = await this.productRepository.findById({
+      id: productId,
+      merchantId: claims.merchantId,
+    });
+
+    return product;
+  }
 }

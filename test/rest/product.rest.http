@@ -17,3 +17,7 @@ GET {{API_URL}}/products?search={{search}}
 ### Find by search and category
 GET {{API_URL}}/products?search={{search}}&categoryId={{categoryId}}
     Authorization: {{token}}
+
+### Find by id
+GET {{API_URL}}/products/1
+    Authorization: {{token}}

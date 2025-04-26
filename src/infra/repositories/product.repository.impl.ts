@@ -1,11 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from 'prisma/generated';
+import { ProductWithVariants } from 'src/domain/entities';
 import { ProductRepository } from 'src/domain/repositories';
 import { PrismaService } from 'src/infra/prisma/prisma.service';
 
 @Injectable()
 export class ProductRepositoryImpl implements ProductRepository {
   constructor(private readonly prisma: PrismaService) {}
+
+  /**
+   * Fetches a single product from the database based on unique identifiers (e.g., id, sku).
+   * It includes related data such as product variants and their options with additional group information.
+   *
+   * @param where - Unique filter criteria to identify the product (e.g., { id: 'product-id' }).
+   * @returns A single product record including its variants and variant options.
+   */
+  private fetchProduct(where: Prisma.ProductWhereUniqueInput) {
+    return this.prisma.product.findUnique({
+      where,
+      include: {
+        ProductVariant: {
+          include: {
+            ProductVariantOption: {
+              include: {
+                variantOption: {
+                  include: {
+                    variantGroup: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  }
 
   /**
    * Fetches a list of products from the database, with optional filtering conditions.
@@ -19,15 +48,12 @@ export class ProductRepositoryImpl implements ProductRepository {
       where, // Apply optional filtering conditions
       include: {
         ProductVariant: {
-          // Include product variants with related options
           include: {
             ProductVariantOption: {
-              // Include variant options (like size, color, etc.)
               include: {
                 variantOption: {
-                  // Include the variant option's details (value, group, etc.)
                   include: {
-                    variantGroup: true, // Include the variant group (like 'Size' or 'Color')
+                    variantGroup: true,
                   },
                 },
               },
@@ -45,10 +71,24 @@ export class ProductRepositoryImpl implements ProductRepository {
    * @param where - Optional filter conditions to refine the products being fetched (e.g., category, price range).
    * @returns A list of products, including variant details and structured data.
    */
-  async find(where?: Prisma.ProductWhereInput) {
+  async find(where: Prisma.ProductWhereInput): Promise<ProductWithVariants[]> {
     // Fetch products from the database with optional filters
     const products = await this.fetchProducts(where);
 
     return products;
+  }
+
+  /**
+   * Fetches a single product by its unique identifier.
+   * Includes related variants and their options.
+   *
+   * @param where - The unique filter for identifying the product (e.g., { id, merchantId }).
+   * @returns The product with variants or null if not found.
+   */
+  async findById(
+    where: Prisma.ProductWhereUniqueInput,
+  ): Promise<ProductWithVariants | null> {
+    const product = await this.fetchProduct(where);
+    return product;
   }
 }
