@@ -87,7 +87,7 @@ export default async function seedProducts() {
           // Variant for Size S, Color Red
           {
             price: 1000, // Price for this variant
-            quantity: 50, // Quantity for this variant
+            quantity: 5, // Quantity for this variant
             ProductVariantOption: {
               create: [
                 { variantOptionId: 1 }, // Size S (ID = 1)

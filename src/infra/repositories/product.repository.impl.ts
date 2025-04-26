@@ -25,13 +25,10 @@ export class ProductRepositoryImpl implements ProductRepository {
       },
     });
 
-    const formatted = products.map((product) => ({
-      id: product.id,
-      name: product.name,
-      description: product.description,
-      photo: product.photo,
-      quantity: product.quantity,
-      variants: product.ProductVariant.map((variant) => {
+    const formatted = products.map((product) => {
+      const hasVariants = product.ProductVariant.length > 0;
+
+      const variants = product.ProductVariant.map((variant) => {
         const size = variant.ProductVariantOption.find(
           (opt) => opt.variantOption.variantGroup.name === 'Size',
         )?.variantOption.value;
@@ -46,8 +43,21 @@ export class ProductRepositoryImpl implements ProductRepository {
           price: variant.price.toString(),
           stock: variant.quantity,
         };
-      }),
-    }));
+      });
+
+      const totalQuantity = hasVariants
+        ? variants.reduce((sum, v) => sum + v.stock, 0)
+        : product.quantity;
+
+      return {
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        photo: product.photo,
+        quantity: totalQuantity,
+        variants,
+      };
+    });
 
     return formatted;
   }
