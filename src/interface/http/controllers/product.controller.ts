@@ -1,8 +1,6 @@
 import { Controller, Get, Headers, Query, UseGuards } from '@nestjs/common';
 import { ProductFilterDto, ProductFilterRequestDto } from 'src/app/dto';
 import { ProductUseCase } from 'src/app/usecase/product.usecase';
-import { ClaimsDecorator } from 'src/common/decorators';
-import { TokenClaims } from 'src/domain/entities';
 import { JwtAuthGuard } from 'src/interface/http/guards';
 
 @Controller('products')
@@ -12,7 +10,6 @@ export class ProductController {
   @Get()
   @UseGuards(JwtAuthGuard)
   getProducts(
-    @ClaimsDecorator() claims: TokenClaims,
     @Query() requestFilter?: ProductFilterRequestDto,
     @Headers('Merchant-Id') merchantId?: number,
   ) {

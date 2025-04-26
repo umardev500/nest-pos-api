@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ClsModule } from 'nestjs-cls';
+import { ClsInterceptor } from 'src/common/interceptors';
 import { AuthModule, ProductModule } from 'src/interface/http/modules';
 
 @Module({
@@ -10,8 +12,12 @@ import { AuthModule, ProductModule } from 'src/interface/http/modules';
     }),
     ProductModule,
     AuthModule,
+    ClsModule.forRoot({
+      global: true,
+      middleware: { mount: true },
+    }),
   ],
   controllers: [],
-  providers: [],
+  providers: [ClsInterceptor],
 })
 export class AppModule {}

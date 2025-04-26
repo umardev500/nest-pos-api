@@ -1,7 +1,7 @@
 export class TokenClaims {
   sub: number;
   email: string;
-  merchant_id: number;
+  merchantId: number;
 }
 
 export class JwtPayload extends TokenClaims {
