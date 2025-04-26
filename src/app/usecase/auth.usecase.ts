@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt'; // Import bcrypt
+import { User } from 'prisma/generated';
 import { InvalidCredentialsException } from 'src/common/exceptions';
 import { TokenClaims } from 'src/domain/entities';
 import { UserRepositoryImpl } from 'src/infra/repositories/user.repository.impl';
@@ -12,8 +13,8 @@ export class AuthUseCase {
     private readonly userRepository: UserRepositoryImpl,
   ) {}
 
-  async validateUser(username: string, password: string) {
-    const user = await this.userRepository.findByEmail(username);
+  async validateUser(email: string, password: string) {
+    const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
       throw new InvalidCredentialsException();
@@ -27,8 +28,8 @@ export class AuthUseCase {
     return user;
   }
 
-  login(user: any) {
-    const payload: TokenClaims = { username: user.username, sub: user.id };
+  login(user: User) {
+    const payload: TokenClaims = { email: user.email, sub: user.id };
 
     return {
       access_token: this.jwtService.sign(payload),

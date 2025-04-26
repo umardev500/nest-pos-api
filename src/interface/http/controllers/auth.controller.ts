@@ -8,15 +8,8 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() body: LoginDto) {
-    const user = await this.authUsecase.validateUser(
-      body.username,
-      body.password,
-    );
-    if (!user) {
-      return {
-        message: 'Invalid credentials',
-      };
-    }
+    const { email, password } = body;
+    const user = await this.authUsecase.validateUser(email, password);
 
     return this.authUsecase.login(user);
   }

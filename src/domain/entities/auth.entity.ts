@@ -1,4 +1,4 @@
 export class TokenClaims {
-  sub: 1;
-  username: string;
+  sub: number;
+  email: string;
 }
