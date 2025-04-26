@@ -1,13 +1,16 @@
 model Product {
-    id             Int              @id @default(autoincrement())
-    name           String
-    description    String?
-    photo          String?
-    quantity       Int              @default(0) // uses if has no variants
-    capital        Decimal          @default(0)
-    price          Decimal          @default(0) // uses if has no variants
-    barcode        String?
-    discount       Decimal          @default(0)
+    id          Int     @id @default(autoincrement())
+    name        String
+    description String?
+    photo       String?
+    quantity    Int     @default(0) // uses if has no variants
+    capital     Decimal @default(0)
+    price       Decimal @default(0) // uses if has no variants
+    barcode     String?
+    discount    Decimal @default(0)
+    categoryId  Int
+
+    category       Category         @relation(fields: [categoryId], references: [id])
     ProductVariant ProductVariant[]
 
     created_at DateTime @default(now())
