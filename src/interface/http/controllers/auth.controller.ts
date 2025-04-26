@@ -7,8 +7,11 @@ export class AuthController {
   constructor(private readonly authUsecase: AuthUseCase) {}
 
   @Post('login')
-  login(@Body() body: LoginDto) {
-    const user = this.authUsecase.validateUser(body.username, body.password);
+  async login(@Body() body: LoginDto) {
+    const user = await this.authUsecase.validateUser(
+      body.username,
+      body.password,
+    );
     if (!user) {
       return {
         message: 'Invalid credentials',

@@ -9,8 +9,8 @@ export default async function seedUser() {
   const users = [
     {
       fullname: 'John Doe',
-      email: 'H2M2A@example.com',
-      password: 'password123', // Plain text password
+      email: 'admin@gmail.com',
+      password: 'admin', // Plain text password
       merchant_id: 1,
     },
   ];

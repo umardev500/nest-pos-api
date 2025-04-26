@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthUseCase } from 'src/app/usecase';
+import { PrismaService } from 'src/infra/prisma/prisma.service';
+import { UserRepositoryImpl } from 'src/infra/repositories/user.repository.impl';
 import { AuthController } from 'src/interface/http/controllers';
 
 @Module({
@@ -20,6 +22,6 @@ import { AuthController } from 'src/interface/http/controllers';
       }),
     }),
   ],
-  providers: [AuthUseCase],
+  providers: [AuthUseCase, UserRepositoryImpl, PrismaService],
 })
 export class AuthModule {}
